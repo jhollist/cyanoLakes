@@ -1,4 +1,8 @@
-v='calcNLCD_ByLakeBuffer.R'
+nction to calculate the impervious cover area and percent in a buffer
+    #Buf is the buffer around lake and cropImperv is the cropped NLCD imperv grid.
+calcImperv<- function(Buf,cropImperv){  
+  gc() #release unused memory 
+  Mask<-mask(cropImpv='calcNLCD_ByLakeBuffer.R'
 
 #########load packages
 libs<-c("sp","rgeos","rgdal","raster","maptools") #list of packages to load
@@ -9,16 +13,22 @@ libs<-c("sp","rgeos","rgdal","raster","maptools") #list of packages to load
     }
 lapply(libs,function(x) installLoad(x))  #Load/Install require packages
 #########
+#location for output file
+  #Output<-'C:/Bryan/PortableApps/R/scripts/cyanoLakes/nlcd/lakeNLCD.rda'
+  Output<-'C:/Users/FrayJorge/Documents/PortableApps/R/scripts/cyanoLakes/nlcd/lakeNLCD.rda'
+
 #get the list of COMIDs and their corresponding NLA_IDs
   ID<- read.csv(url('https://raw.github.com/jhollist/cyanoLakes/master/nlalm/nlaid_comid_lut.csv'))
 
 #get the NLCD grid data
   #Impervious Surface
-    Imperv<-raster('L:/Public/Milstead_Lakes/NLCD2006/nlcd_2006_impervious_2011_edition_2014_03_31.img')
+    #Imperv<-raster('L:/Public/Milstead_Lakes/NLCD2006/nlcd_2006_impervious_2011_edition_2014_03_31.img')
+    Imperv<-raster('C:/Users/FrayJorge/Documents/PortableApps/R/scripts/cyanoLakes/nlcd/nlcd_2006_impervious_2011_edition_2014_03_31.img')     
       #image(Imperv)
       #extent(Imperv)
   #NLCD Landcover
-    LULC<-raster('L:/Public/Milstead_Lakes/NLCD2006/nlcd_2006_landcover_2011_edition_2014_03_31.img')
+    #LULC<-raster('L:/Public/Milstead_Lakes/NLCD2006/nlcd_2006_landcover_2011_edition_2014_03_31.img')
+    LULC<-raster('C:/Users/FrayJorge/Documents/PortableApps/R/scripts/cyanoLakes/nlcd/nlcd_2006_landcover_2011_edition_2014_03_31.img')      
       #LULC codes in the lower 48-not sure what zero is. NA returned for portions of grid not within buffer.
         LULCcodes<-data.frame(Code=c(0,11,12,21,22,23,24,31,41,42,43,52,71,81,82,90,95,NA)) 
 
@@ -29,7 +39,7 @@ lapply(libs,function(x) installLoad(x))  #Load/Install require packages
              'Pasture','Crops','WoodyWet','HerbWet','OutsideBuf')
 
 ######################function to calculate the impervious cover area and percent in a buffer
-    #Buf is the buffer around lake and cropImperv is the cropped NLCD imperv grid.
+#Buf is the buffer around lake and cropImperv is the cropped NLCD imperv grid.
 calcImperv<- function(Buf,cropImperv){  
   gc() #release unused memory 
   Mask<-mask(cropImperv, Buf)  #extract impervious cover pixels in the buffer (all others changed to NA)
@@ -46,7 +56,6 @@ calcImperv<- function(Buf,cropImperv){
   PercentImperv<-round(sum(ImpervAreaKm2)/sum(BufAreaKm2Adj),4)*100 #calculate the percent of impervious cover 
   data.frame(PercentImperv,ImpervAreaKm2,BufAreaKm2,BufAreaKm2Adj,PercentNA)
 }
-
 ######################function to calculate the landcover area in a buffer.
     #Buf is the buffer around lake and cropLULC is the cropped NLCD landuse grid.
   calcLULC<- function(Buf,cropLULC){ 
@@ -127,7 +136,7 @@ calcNLCD<-function(Index,PlotYN='Y'){
 }    
 
 calcNLCD(1,'N')
-calcNLCD(22,'Y')
+calcNLCD(2,'Y')
 
 
 ##loop to run all NLA lakes in the df 'ID'
@@ -146,11 +155,9 @@ calcNLCD(22,'Y')
         tryCatch(lakeNLCD[(4*i-3):(i*4),]<-calcNLCD(i,'Y'),error=function(e) NA) 
           lakeNLCD[(4*i-3):(i*4),1:2]<-ID[i,c(2,4)] #re-add the IDs to find problem lakes
           Counter<-Counter+1
-            if (Counter==S) save(lakeNLCD, #save file every S iterations
-                file='C:/Bryan/PortableApps/R/scripts/cyanoLakes/bryan/lakeNLCD.rda') 
+            if (Counter==S) save(lakeNLCD,file=Output) #save file every S iterations                
             if(Counter==S) Counter<-0
-            if (i==N) save(lakeNLCD, #save file at end of loop
-                file='C:/Bryan/PortableApps/R/scripts/cyanoLakes/bryan/lakeNLCD.rda') 
+            if (i==N) save(lakeNLCD,file=Output) #save file at end of loop                 
     }#End Loop
 
 lakeNLCD[1:16,]
