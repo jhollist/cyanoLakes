@@ -135,7 +135,7 @@ calcNLCD<-function(Index,PlotYN='Y'){
 }    
 
 #calcNLCD(1,'N')
-calcNLCD(1095,'Y')
+calcNLCD(2,'Y')
 
 ######################
 
@@ -162,42 +162,41 @@ calcNLCD(1095,'Y')
             if (i==N) save(lakeNLCD,file=Output) #save file at end of loop                 
     }#End Loop
 
-qq<-4000
-ww<-qq+100
+##########################
+#check to make sure the buffer areas are the same for both calculations (Imperve & NLCD)
+  a<-apply(lakeNLCD[,9:25],1,sum,na.rm=T)
+  a<-round(a*30*30/1000000,3)
+  table(lakeNLCD$BufferAreaKm2==a)  #true=4624
+  test<-(lakeNLCD$BufferAreaKm2Adj==a)  #test buffer area vs. bufferarea adj.
+  table(test)  #true=4606 false=18
+    #rows where the adjusted buffer not equal the buffer area have missing values.
+      all.equal(lakeNLCD[!test,],lakeNLCD[lakeNLCD$PercentNA>0,])                #true
+      all.equal(lakeNLCD[lakeNLCD$NLCD_Zero>0,],lakeNLCD[lakeNLCD$PercentNA>0,]) #true
 
-lakeNLCD[qq:ww,1:3]
+#Modify data.frame
+  #copy first
+    a<-lakeNLCD[,-26] #remove the "OutsideBuf" field
+  #NLCD values stored as number of pixels in buffer for each category.  Converst to km2
+    a[,9:25]<-a[,9:25]*30*30/1000000
+  #rename fields to show the units (Km2)
+    names(a)[10:25]<-paste(names(lakeNLCD[,10:25]),'Km2',sep='')
+  #rename field NLCD_Zero to missing values
+    names(a)[9]<-'NLCD_NA_Km2'
+  #calculate NLCD percents
+    #define the names for the new fields
+      PerNames<-c('NLCD_NA_Per',paste(names(lakeNLCD[,10:25]),'Per',sep=''))
+    #calculate the percents for each NLCD category
+      a[,PerNames]<-round(a[,9:25]/a$BufferAreaKm2Adj,4)*100
+    #add field to distinguish between fixed width and variable (radius) width buffers.  
+        #some radius buffers the same as the fixed width.
+      a$BufType<-c('MaxDist','fixed','fixed','fixed')
 
-load(Output)
-
-#############old below
-
-#add field to distinguish between fixed width and variable (radius) width buffers.  
-#some radius buffers the same as the fixed width.
-lakeImperv$BufType<-c('MaxDist','fixed','fixed','fixed')
-#table(lakeImperv$BufType)
-#table(lakeImperv[lakeImperv$BufWidthM==300,'BufType'])
-
-#save the data
-#save(lakeImperv,file="L:/Public/Milstead_Lakes/RData/NLCD2006ImpervLakes_20130212.rda")  #save the last records.
-#load("L:/Public/Milstead_Lakes/RData/NLCD2006ImpervLakes_20130212.rda")
-#write.table(lakeImperv, file='c:/temp/lakeImperv.csv',row.names=F,sep=',')
-
-# Write data to tblMNKA in fj.mdb
-require(RODBC)   #Package RODBC must be installed
-con <- odbcConnectAccess("C:/Bryan/EPA/Data/WaterbodyDatabase/WaterbodyDatabase.mdb")
-FJ <- sqlSave(con,dat=lakeImperv,tablename='LakeNLCD2006ImperviousCover',append=F,rownames=F)
-close(con)
-
-
-##Data Definitions  n=28,121 (Lake Champlain excluded due to size and complexity)
-#WB_ID:  Lake identification number
-#BufWidthM: (m) width of lake buffer for calculations
-#PercentImperv:  (%) Percent impervious cover in buffer = ImpervAreaKm2/BufferAreaKm2Adj/100
-#ImpervAreaKm2:  (Km2) total impervious cover in the buffer
-#BufferAreaKm2:  (Km2) Area of entire buffer-number of grid cells*30*30/1000000 
-#BufferAreaKm2Adj (Km2) Area of Non-NA buffer-number of grid cells with data*30*30/1000000 
-#PercentNA:  (%) (number of NA grid cells)/(total number of grid cells)*100
-#BufType: "Fixed" = standard buffer width; "Radius" buffer width = radius of a circle with Area = lake area.
-
+#lakeNLCD saved to directory 'nlcd' which is currently not tracked
+  #the df lakeNLCD in the NLCD directory contains the raw geoprocessed data-leave it there
+  #rename the modified lakeNLCD data in df 'a' back to 'lakeNLCD' and copy to directory 'bryan' for tracking
+  lakeNLCD<-a
+    save(lakeNLCD,file="./bryan/calcLULCByLakeBuffer.rda")
+      #load(file="./bryan/calcLULCByLakeBuffer.rda") #to get the modified lakeNLCD dataframe
+      #load(file="./nlcd/lakeNLCD.rda") #to get the raw dataframe
 
 
