@@ -128,22 +128,25 @@ calcNLCD<-function(Index,PlotYN='Y'){
   #rename the output columns
     names(a)<-Names
   #print elapsed time
-    print(paste(Comid,' Time Elapsed = ',round(Sys.time()-Start),' seconds')) #how long did the process take?
+    print(paste('For ID line # = ',Index,' Time Elapsed = ',round(Sys.time()-Start),' seconds')) #how long did the process take?
     print('') #extra line
   #return results
     return(a)
 }    
 
 #calcNLCD(1,'N')
-calcNLCD(2,'Y')
+calcNLCD(1095,'Y')
 
+######################
+
+#create df to store the output
+  lakeNLCD<-data.frame(matrix(NA,nrow=nrow(ID)*4,ncol=length(Names)))  
+    names(lakeNLCD)<-Names
+###################
 
 ##loop to run all NLA lakes in the df 'ID'
-  #create df to store the output
-    lakeNLCD<-data.frame(matrix(NA,nrow=nrow(ID)*4,ncol=length(Names)))  
-      names(lakeNLCD)<-Names
   #constants for loop and for saving
-    B<-1  #row number to start processing lakes; this will be 1 to start.
+    B<-1000  #row number to start processing lakes; this will be 1 to start.
     N<-nrow(ID)    #last row to process; 
     #N<-3    #last row to process; 
     S<-100                 #save the work every "S" lakes
@@ -159,7 +162,12 @@ calcNLCD(2,'Y')
             if (i==N) save(lakeNLCD,file=Output) #save file at end of loop                 
     }#End Loop
 
-lakeNLCD[1:16,]
+qq<-4000
+ww<-qq+100
+
+lakeNLCD[qq:ww,1:3]
+
+load(Output)
 
 #############old below
 
