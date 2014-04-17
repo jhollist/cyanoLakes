@@ -1,21 +1,27 @@
-calcLULCByLakeBuffer.RDA Data Defintions
+calcNLCD_ByLakeBuffer.RDA Data Defintions
 ========================================================
 **Last Update=April 17, 2014**
 ***************
+
+Note: check NLA_ID='NLA06608-2477'  This is associated with two COMID (946060001 & 20639586)
+
+Note:  check COMID=22302965  associated with two NLA_IDs (NLA06608-0053 & NLA06608-0433)
+***************
+
 **This data set contains one data.frame "lakeNLCD"
 
 ************
   #Data Definitions:
   
-    browseURL('https://github.com/jhollist/cyanoLakes/blob/master/bryan/calcLULCByLakeBuffer.md')
+    browseURL('https://github.com/jhollist/cyanoLakes/blob/master/bryan/calcNLCD_ByLakeBuffer.md')
 ************
 The data can be loaded into R with the following code:
 ************
   #Get the Data
   
-    load(url('https://raw.github.com/jhollist/cyanoLakes/master/bryan/cyanoBioVolData.rda'))
+    load(url('https://github.com/jhollist/cyanoLakes/raw/master/bryan/calcNLCD_ByLakeBuffer.RDA'))
 
-***********
+
 ************
 **lakeNLCD**: NLCD (2006) landcover area and percents by category and NLCD percent impervious cover for 4 buffer zones around NLA lakes
 
@@ -23,8 +29,8 @@ The data can be loaded into R with the following code:
 
 **Field**  | **Definition**
 ------------- | ------------- 
-Comid | Comid for lake from NHDplus Version 2
 NLA_ID | USEPA National Lake Assessment 2007 unique identifier
+Comid | Comid for lake from NHDplus Version 2
 BufWidthM | BufWidthM: (m) width of lake buffer for calculations
 PercentImperv | PercentImperv:  (%) Percent impervious cover in buffer = ImpervAreaKm2/BufferAreaKm2Adj/100
 ImpervAreaKm2 | ImpervAreaKm2:  (Km2) total impervious cover in the buffer

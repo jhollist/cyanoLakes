@@ -191,12 +191,21 @@ calcNLCD(2,'Y')
         #some radius buffers the same as the fixed width.
       a$BufType<-c('MaxDist','fixed','fixed','fixed')
 
-#lakeNLCD saved to directory 'nlcd' which is currently not tracked
-  #the df lakeNLCD in the NLCD directory contains the raw geoprocessed data-leave it there
+
+  #In lakeNLCD the NLAID's were changed to numeric (from factor).  Change these back
+    #create data.frame to merge back
+      b<-data.frame(NLA_ID=as.numeric(ID$nlaSITE_ID),nlaSITE_ID=as.character(ID$nlaSITE_ID))
+      a<-merge(a,b,by='NLA_ID',all.x=T) #merge NLA_ID back to dataframe
+      a$NLA_ID<-a$nlaSITE_ID  #copy the character id to NLA_ID
+      a<-a[,-60] #delete the redundant field
+    
+
   #rename the modified lakeNLCD data in df 'a' back to 'lakeNLCD' and copy to directory 'bryan' for tracking
-  lakeNLCD<-a
-    save(lakeNLCD,file="./bryan/calcLULCByLakeBuffer.rda")
-      #load(file="./bryan/calcLULCByLakeBuffer.rda") #to get the modified lakeNLCD dataframe
+  #lakeNLCD saved to directory 'nlcd' which is currently not tracked
+  #the df lakeNLCD in the NLCD directory contains the raw geoprocessed data-leave it there
+    lakeNLCD<-a
+    save(lakeNLCD,file="./bryan/calcNLCD_ByLakeBuffer.RDA")
+      #load(file="./bryan/calcNLCD_ByLakeBuffer.rda") #to get the modified lakeNLCD dataframe
       #load(file="./nlcd/lakeNLCD.rda") #to get the raw dataframe
 
 

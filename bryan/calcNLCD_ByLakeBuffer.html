@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta http-equiv="x-ua-compatible" content="IE=9" >
 
-<title>calcLULCByLakeBuffer.RDA Data Defintions</title>
+<title>calcNLCD_ByLakeBuffer.RDA Data Defintions</title>
 
 <style type="text/css">
 body, td {
@@ -142,9 +142,15 @@ hr {
 </head>
 
 <body>
-<h1>calcLULCByLakeBuffer.RDA Data Defintions</h1>
+<h1>calcNLCD_ByLakeBuffer.RDA Data Defintions</h1>
 
 <p><strong>Last Update=April 17, 2014</strong></p>
+
+<hr/>
+
+<p>Note: check NLA_ID=&#39;NLA06608-2477&#39;  This is associated with two COMID (946060001 &amp; 20639586)</p>
+
+<p>Note:  check COMID=22302965  associated with two NLA_IDs (NLA06608-0053 &amp; NLA06608-0433)</p>
 
 <hr/>
 
@@ -154,7 +160,7 @@ hr {
 
 <p>#Data Definitions:</p>
 
-<pre><code>browseURL(&#39;https://github.com/jhollist/cyanoLakes/blob/master/bryan/calcLULCByLakeBuffer.md&#39;)
+<pre><code>browseURL(&#39;https://github.com/jhollist/cyanoLakes/blob/master/bryan/calcNLCD_ByLakeBuffer.md&#39;)
 </code></pre>
 
 <hr/>
@@ -165,10 +171,8 @@ hr {
 
 <p>#Get the Data</p>
 
-<pre><code>load(url(&#39;https://raw.github.com/jhollist/cyanoLakes/master/bryan/cyanoBioVolData.rda&#39;))
+<pre><code>load(url(&#39;https://github.com/jhollist/cyanoLakes/raw/master/bryan/calcNLCD_ByLakeBuffer.RDA&#39;))
 </code></pre>
-
-<hr/>
 
 <hr/>
 
@@ -183,12 +187,12 @@ hr {
 </tr>
 </thead><tbody>
 <tr>
-<td>Comid</td>
-<td>Comid for lake from NHDplus Version 2</td>
-</tr>
-<tr>
 <td>NLA_ID</td>
 <td>USEPA National Lake Assessment 2007 unique identifier</td>
+</tr>
+<tr>
+<td>Comid</td>
+<td>Comid for lake from NHDplus Version 2</td>
 </tr>
 <tr>
 <td>BufWidthM</td>
