@@ -147,7 +147,7 @@ calcNLCD(22,'Y')
           lakeNLCD[(4*i-3):(i*4),1:2]<-ID[i,c(2,4)] #re-add the IDs to find problem lakes
           Counter<-Counter+1
             if (Counter==S) save(lakeNLCD, #save file every S iterations
-                file='C:/Bryan/PortableApps/R/scripts/cyanoLakes/bryan/lakeNLCD.rda') 
+                file='./bryan/lakeNLCD.rda') 
             if(Counter==S) Counter<-0
             if (i==N) save(lakeNLCD, #save file at end of loop
                 file='C:/Bryan/PortableApps/R/scripts/cyanoLakes/bryan/lakeNLCD.rda') 
@@ -158,35 +158,13 @@ calcNLCD(22,'Y')
 
 lakeNLCD[501:516,]
 
-#############old below
-
-#add field to distinguish between fixed width and variable (radius) width buffers.  
-#some radius buffers the same as the fixed width.
-lakeImperv$BufType<-c('MaxDist','fixed','fixed','fixed')
-#table(lakeImperv$BufType)
-#table(lakeImperv[lakeImperv$BufWidthM==300,'BufType'])
-
-#save the data
-#save(lakeImperv,file="L:/Public/Milstead_Lakes/RData/NLCD2006ImpervLakes_20130212.rda")  #save the last records.
-#load("L:/Public/Milstead_Lakes/RData/NLCD2006ImpervLakes_20130212.rda")
-#write.table(lakeImperv, file='c:/temp/lakeImperv.csv',row.names=F,sep=',')
-
-# Write data to tblMNKA in fj.mdb
-require(RODBC)   #Package RODBC must be installed
-con <- odbcConnectAccess("C:/Bryan/EPA/Data/WaterbodyDatabase/WaterbodyDatabase.mdb")
-FJ <- sqlSave(con,dat=lakeImperv,tablename='LakeNLCD2006ImperviousCover',append=F,rownames=F)
-close(con)
+#Delete lines for COMID = 946060001; this lake is in twice and values are the same.
+#Delete lines for NLAID= NLA06608-0433 (South Lake Champlain) & NLAID=NLA06608-0053 (Lake Champlain).
+  #These are 2 NLA lakes but only 1 lake morho lake.  Too big anyway.
+    Delete<--c(grep("946060001",lakeNLCD$Comid), grep("NLA06608-0433",lakeNLCD$NLA_ID),
+      grep("NLA06608-0053",lakeNLCD$NLA_ID))
+    lakeNLCD<-lakeNLCD[Delete,]
+    save(lakeNLCD,file='./bryan/lakeNLCD.rda') 
 
 
-##Data Definitions  n=28,121 (Lake Champlain excluded due to size and complexity)
-#WB_ID:  Lake identification number
-#BufWidthM: (m) width of lake buffer for calculations
-#PercentImperv:  (%) Percent impervious cover in buffer = ImpervAreaKm2/BufferAreaKm2Adj/100
-#ImpervAreaKm2:  (Km2) total impervious cover in the buffer
-#BufferAreaKm2:  (Km2) Area of entire buffer-number of grid cells*30*30/1000000 
-#BufferAreaKm2Adj (Km2) Area of Non-NA buffer-number of grid cells with data*30*30/1000000 
-#PercentNA:  (%) (number of NA grid cells)/(total number of grid cells)*100
-#BufType: "Fixed" = standard buffer width; "Radius" buffer width = radius of a circle with Area = lake area.
-
-
-
+#############

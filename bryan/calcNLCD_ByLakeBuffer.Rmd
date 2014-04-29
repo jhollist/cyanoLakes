@@ -1,11 +1,8 @@
 calcNLCD_ByLakeBuffer.RDA Data Defintions
 ========================================================
-**Last Update=April 17, 2014**
-***************
+Note: NLA_ID='NLA06608-2477' is associated with two COMID (946060001 & 20639586) files.  Both files are for the same lake.  One COMID (946060001) deleted in final product.
 
-Note: check NLA_ID='NLA06608-2477'  This is associated with two COMID (946060001 & 20639586)
-
-Note:  check COMID=22302965  associated with two NLA_IDs (NLA06608-0053 & NLA06608-0433)
+Note:  COMID=22302965 is Lake Champlain.  The southern end of lake champlain is treated as a separate lake by the NLA.  The main portion of the lake is NLAID= NLA06608-0433 (WBID = 22302965) and the southern portion of Lake Champlain is NLAID=NLA06608-0053 (WBID = 10312598).  Both NLA_ID's deleted in final product.
 ***************
 
 **This data set contains one data.frame "lakeNLCD"
