@@ -147,10 +147,10 @@ calcNLCD(22,'Y')
           lakeNLCD[(4*i-3):(i*4),1:2]<-ID[i,c(2,4)] #re-add the IDs to find problem lakes
           Counter<-Counter+1
             if (Counter==S) save(lakeNLCD, #save file every S iterations
-                file='./bryan/lakeNLCD.rda') 
+                file='./bryan/calcNLCD_ByLakeBuffer.RDA') 
             if(Counter==S) Counter<-0
             if (i==N) save(lakeNLCD, #save file at end of loop
-                file='C:/Bryan/PortableApps/R/scripts/cyanoLakes/bryan/lakeNLCD.rda') 
+                file='./bryan/calcNLCD_ByLakeBuffer.RDA') 
     }#End Loop
 
 
@@ -164,7 +164,7 @@ lakeNLCD[501:516,]
     Delete<--c(grep("946060001",lakeNLCD$Comid), grep("NLA06608-0433",lakeNLCD$NLA_ID),
       grep("NLA06608-0053",lakeNLCD$NLA_ID))
     lakeNLCD<-lakeNLCD[Delete,]
-    save(lakeNLCD,file='./bryan/lakeNLCD.rda') 
+    save(lakeNLCD,file='./bryan/calcNLCD_ByLakeBuffer.RDA') 
 
 
 #############
